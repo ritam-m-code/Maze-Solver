@@ -20,11 +20,11 @@ synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:windo
 
 public void densitySliderChanged(GCustomSlider source, GEvent event) { //_CODE_:densitySlider:846323:
   wallChance = densitySlider.getValueI();
-   if(!solving){
+ 
     resetButtons();
     loop();
     m.setMaze();
-  }
+ 
 } //_CODE_:densitySlider:846323:
 
 public void frameRateSliderChanged(GCustomSlider source, GEvent event) { //_CODE_:frameRateSlider:518536:

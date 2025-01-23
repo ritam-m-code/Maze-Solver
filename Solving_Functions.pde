@@ -34,41 +34,41 @@ boolean recursiveSolver(int r, int c, Maze m) {
 
 // Dijkstra's algorithm to find the shortest path
 boolean dijkstraPath(Maze m, PVector start, PVector end) {
-  int rows = m.grid.length, cols = m.grid[0].length;
+  int rows = m.grid.length, cols = m.grid[0].length; //Get parameters for dist 2D array
 
-  float[][] dist = new float[rows][cols];
+  float[][] dist = new float[rows][cols]; //Create 2D array to store distances between nodes
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      dist[i][j] = Float.MAX_VALUE;
+      dist[i][j] = Float.MAX_VALUE; //Set the distance to the max value possible
     }
   }
-  dist[(int) start.x][(int) start.y] = 0;
+  dist[(int) start.x][(int) start.y] = 0; //Set the distance to the first square as 0
 
-  PriorityQueue<Node> queue = new PriorityQueue<Node>();
-  queue.add(new Node(start, 0));
+  PriorityQueue<Node> queue = new PriorityQueue<Node>(); //Create a priority queue with nodes as the data type
+  queue.add(new Node(start, 0)); //Add the node you're at
 
-  HashMap<PVector, PVector> predecessors = new HashMap<PVector, PVector>();
-  int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+  HashMap<PVector, PVector> predecessors = new HashMap<PVector, PVector>(); //Create a hashmap of PVectors and PVectors keys
+  int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; //direction array in 2D
 
-  while (!queue.isEmpty()) {
-    Node current = queue.poll();
-    PVector pos = current.position;
+  while (!queue.isEmpty()) { //The queue is not empty
+    Node current = queue.poll(); //Take the current position and remove it from the queue
+    PVector pos = current.position; //Set it to the current position
 
-    if (pos.equals(end)) {
+    if (pos.equals(end)) { // Base case
       // Path found, reconstruct the path and update the global solutionPath
       solutionPath.clear();
       solutionPath.addAll(reconstructPath(predecessors, end));
       return true;  // Return true if the path is found
     }
 
-    for (int[] dir : directions) {
-      int nx = (int) pos.x + dir[0], ny = (int) pos.y + dir[1];
-      if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && m.grid[nx][ny] == 1) {
-        float newDist = dist[(int) pos.x][(int) pos.y] + 1;
-        if (newDist < dist[nx][ny]) {
-          dist[nx][ny] = newDist;
-          queue.add(new Node(new PVector(nx, ny), newDist));
-          predecessors.put(new PVector(nx, ny), pos);
+    for (int[] dir : directions) { //Check every direction
+      int nx = (int) pos.x + dir[0], ny = (int) pos.y + dir[1]; //Get the next position
+      if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && m.grid[nx][ny] == 1) { //Check if the new square is valid
+        float newDist = dist[(int) pos.x][(int) pos.y] + 1; //Calculate the new distance
+        if (newDist < dist[nx][ny]) { //Check if the distance is less at the selected square than others
+          dist[nx][ny] = newDist; //Set its distance to the calculated value in the 2D array
+          queue.add(new Node(new PVector(nx, ny), newDist)); //Add the node with the found values to the queue
+          predecessors.put(new PVector(nx, ny), pos); 
         }
       }
     }
@@ -79,8 +79,8 @@ boolean dijkstraPath(Maze m, PVector start, PVector end) {
 // Reconstruct the shortest path and mark it in the grid
 ArrayList<PVector> reconstructPath(HashMap<PVector, PVector> predecessors, PVector end) {
   ArrayList<PVector> path = new ArrayList<PVector>();
-  for (PVector at = end; at != null; at = predecessors.get(at)) {
-    path.add(0, at);
+  for (PVector at = end; at != null; at = predecessors.get(at)) { //Find the PVector from the predecessors array 
+    path.add(0, at); //add it to the path
   }
 
   // Now mark the cells that are part of the solution path as visited (for blue highlighting)
